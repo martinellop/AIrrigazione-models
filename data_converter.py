@@ -12,8 +12,8 @@ def center_crop(image,out_height,out_width):
 
 
 basedir = "/Users/infopz/Not_iCloud/FotoCielo/Dataset/train/"
-data_save = "/Users/infopz/Not_iCloud/testF.npm"
-label_save = "/Users/infopz/Not_iCloud/testF_label.npm"
+data_save = "/Users/infopz/Not_iCloud/trainF.npm"
+label_save = "/Users/infopz/Not_iCloud/trainF_label.npm"
 
 imgs_path = []
 
