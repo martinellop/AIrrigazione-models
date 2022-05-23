@@ -13,10 +13,11 @@ import time
 import datetime
 
 
-train_folder_original = os.path.join(".","tmp", "test_train_dataset_24")
+train_folder_original = os.path.join(".","tmp", "train_set")
 train_folder_final = os.path.join(".","dataset", "train")
 
 final_image_w = 416
+images_per_class = 4000
 
 def get_files_from_folder(path):
 
@@ -100,5 +101,5 @@ for i in range(len(classes)):
     print(f"Working on class: {classes[i]}")
     classPath, pictures = get_pictures_of_class(classes[i])
     os.makedirs(os.path.join(train_folder_final,classes[i]))
-    augument_pictures(classes[i],50)
+    augument_pictures(classes[i],images_per_class)
 print(f"Total time: {datetime.datetime.now() - startTime}")
