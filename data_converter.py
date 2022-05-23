@@ -1,7 +1,11 @@
 import numpy as np
 import cv2
 import os
+import shutil
 
+basedir = os.path.join(".","tmp", "test_train_dataset")
+data_save = os.path.join(".","dataset", "trainF.npm")
+label_save = os.path.join(".","dataset", "trainF_label.npm")
 
 def center_crop(image,out_height,out_width):
     input_height, input_width = image.shape[:2]
@@ -10,22 +14,17 @@ def center_crop(image,out_height,out_width):
     image = image[offset_height:offset_height+out_height, offset_width:offset_width+out_width,:]
     return image
 
-
-basedir = "/Users/infopz/Not_iCloud/FotoCielo/Dataset/train/"
-data_save = "/Users/infopz/Not_iCloud/trainF.npm"
-label_save = "/Users/infopz/Not_iCloud/trainF_label.npm"
-
 imgs_path = []
-
 # Prima creo un elenco di tutti i file e le corrispettive label
 labels = os.listdir(basedir)
+
 for l in labels:
     if l.startswith("."): continue  # skippo file nascosti che rompono
-    label_p = basedir + str(l) + "/"
+    label_p = os.path.join(basedir, l)
     # per ogni cartella delle label guardo i file dentro
     imgs = os.listdir(label_p)
-    imgs = [i for i in imgs if i.endswith(".JPG")]
-    imgs_path += [(label_p+i, l) for i in imgs] # Creo tante coppie (path_immagine, label)
+    imgs = [i for i in imgs if i.endswith(".JPG") or i.endswith(".jpg")]
+    imgs_path += [(os.path.join(label_p,i), l) for i in imgs] # Creo tante coppie (path_immagine, label)
 
 numImages = len(imgs_path)
 print(numImages)
@@ -54,15 +53,25 @@ print(' x data type:', x[0].dtype)
 print(' y shape:', y.shape)
 print(' y data type:', y[0].dtype)
 
+#cancello eventuali dati precedenti
+if os.path.exists(data_save):
+    os.remove(data_save)
+
 # Salvo i dati
 f = np.memmap(data_save, dtype='float32', mode='w+', shape=(numImages, 3, 416, 416))
 f[:] = x[:]
 f.flush()
+f.close()
+
+#cancello eventuali label precedenti
+if os.path.exists(label_save):
+    os.remove(label_save)
 
 # Salvo le label
 l = np.memmap(label_save, dtype='uint8', mode='w+', shape=(numImages,))
 l[:] = y[:]
 l.flush()
+l.close()
 
 # test apertura
 #fpr = np.memmap("/Users/infopz/Not_iCloud/train.npm", dtype='float32', mode='r', shape=(1352, 3, 416, 416))
