@@ -3,16 +3,12 @@ import cv2
 import os
 import shutil
 
-basedir = os.path.join(".","tmp", "test_train_dataset")
+basedir = os.path.join(".","dataset", "train")
 data_save = os.path.join(".","dataset", "trainF.npm")
 label_save = os.path.join(".","dataset", "trainF_label.npm")
 
-def center_crop(image,out_height,out_width):
-    input_height, input_width = image.shape[:2]
-    offset_height = (input_height - out_height) // 2
-    offset_width = (input_width - out_width) // 2
-    image = image[offset_height:offset_height+out_height, offset_width:offset_width+out_width,:]
-    return image
+final_image_w = 416
+
 
 imgs_path = []
 # Prima creo un elenco di tutti i file e le corrispettive label
@@ -29,7 +25,7 @@ for l in labels:
 numImages = len(imgs_path)
 print(numImages)
 
-x = np.ndarray(shape=(numImages, 416, 416, 3), dtype=np.uint8, order='C')
+x = np.ndarray(shape=(numImages, final_image_w, final_image_w, 3), dtype=np.uint8, order='C')
 
 y = np.ndarray(shape=(numImages), dtype=np.uint8, order='C')
 
@@ -37,9 +33,6 @@ for i, (image_path, label) in enumerate(imgs_path):
     print(i)
     img = cv2.imread(image_path)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    # TODO: Aggiungere del preproccesing qua, tipo il randomCrop o la normalizzaizone
-    img = center_crop(img, 416, 416)
-
     x[i] = img
     y[i] = int(label) - 1 # -1 perche le cartelle vanno da 1 a 5, mentre torch vuole 0-4
 
@@ -58,10 +51,9 @@ if os.path.exists(data_save):
     os.remove(data_save)
 
 # Salvo i dati
-f = np.memmap(data_save, dtype='float32', mode='w+', shape=(numImages, 3, 416, 416))
+f = np.memmap(data_save, dtype='float32', mode='w+', shape=(numImages, 3, final_image_w, final_image_w))
 f[:] = x[:]
 f.flush()
-f.close()
 
 #cancello eventuali label precedenti
 if os.path.exists(label_save):
@@ -71,17 +63,16 @@ if os.path.exists(label_save):
 l = np.memmap(label_save, dtype='uint8', mode='w+', shape=(numImages,))
 l[:] = y[:]
 l.flush()
-l.close()
 
 # test apertura
-#fpr = np.memmap("/Users/infopz/Not_iCloud/train.npm", dtype='float32', mode='r', shape=(1352, 3, 416, 416))
+#fpr = np.memmap("/Users/infopz/Not_iCloud/train.npm", dtype='float32', mode='r', shape=(1352, 3, final_image_w, final_image_w))
 #print(fpr[324])
 
 
 ''' HDF5 - VECCHIO METODO
 import h5py
 with h5py.File('train.hdf5', 'w') as hf:
-    dset_x_train = hf.create_dataset('x_train', data=x, shape=(numImages, 416, 416, 3), compression='gzip', chunks=True)
+    dset_x_train = hf.create_dataset('x_train', data=x, shape=(numImages, final_image_w, final_image_w, 3), compression='gzip', chunks=True)
     dset_y_train = hf.create_dataset('y_train', data=y, shape=(numImages,), compression='gzip', chunks=True)
 
 #with h5py.File('test.hdf5', 'w') as hf:
