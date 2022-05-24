@@ -17,7 +17,7 @@ train_folder_original = os.path.join(".","tmp", "train_set")
 train_folder_final = os.path.join(".","dataset", "train")
 
 final_image_w = 416
-images_per_class = 4000
+images_per_class = 1000
 
 def get_files_from_folder(path):
 
