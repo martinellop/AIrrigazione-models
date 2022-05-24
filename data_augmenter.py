@@ -33,7 +33,7 @@ def get_pictures_of_class(targetClass):
 def get_random_square_subpicture(original_image, final_width:int):
     input_h, input_w = original_image.shape[:2]
 
-    normalized_min_width = 0.8
+    normalized_min_width = 1
     minimum_width = min(input_h*normalized_min_width, input_w*normalized_min_width)
     minimum_width = max(math.ceil(minimum_width), final_width)
     random.seed(time.time())
