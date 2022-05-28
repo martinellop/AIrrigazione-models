@@ -46,7 +46,7 @@ stds = [50.12136, 40.37624, 36.41211]
 
 for i in range(3):
     print("Processo canale", i)
-    x[:,i,:,:] = (x[:,i,:,:] - means[i])/stds[i
+    x[:,i,:,:] = (x[:,i,:,:] - means[i])/stds[i]
 
 
 print(' x shape:', x.shape)

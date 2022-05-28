@@ -19,23 +19,23 @@ data_transforms = transforms.Compose([
 
 data_dir = "/Users/infopz/Not_iCloud/PeopleDataset/divided2"
 
-# Create training and validation datasets
+# Creazione dei dataset di train & validation
 train_dataset = datasets.ImageFolder(os.path.join(data_dir, "train"), data_transforms)
 test_dataset = datasets.ImageFolder(os.path.join(data_dir, "test"), data_transforms)
-# Create training and validation dataloaders
+# Creazione dei dataloaders di train & validation
 dl_train = DataLoader(train_dataset, batch_size=8, shuffle=True, num_workers=0)
 dl_test = DataLoader(test_dataset, batch_size=8, shuffle=True, num_workers=0)
 
 
 # Prendiamo come modello resnet18
 model = models.resnet18(pretrained=True)
-# dico ai parametri di non calcolarsi il gradiente, faccio finetuning solo sull'ulitmo fc
+# impostiamo i parametri in modo che non calcolino il gradiente, facendo finetuning solo sull'ulitmo fc
 for param in model.parameters():
     param.requires_grad = False
-# Sostituisco il vecchio fc con uno nuovo a solo 2 classi
+# Sostituiamo il vecchio fc con uno nuovo a solo 2 classi
 model.fc = nn.Linear(512, 2)
 
-# Indico all'ottimizzatore quali parametri ottimizzzre
+# Indichiamo all'ottimizzatore quali parametri ottimizzzre
 params_to_update = []
 for param in model.parameters():
     if param.requires_grad:
@@ -45,7 +45,7 @@ optimizer = optim.SGD(params_to_update, lr=0.001, momentum=0.9)
 loss_fn = nn.CrossEntropyLoss()
 epoch_num = 200
 
-# Definisco l'accuracy
+# Definisciamo l'accuracy
 def eval_acc(model, data_loader):
     correct = 0
     total = 0
@@ -66,7 +66,7 @@ def eval_acc(model, data_loader):
     return correct / total, confusion_matrix
 
 
-# Alleno e testo
+# Alleniamo e testiamo
 for i in range(epoch_num):
 
     train_acc, train_cm = eval_acc(model, dl_train)

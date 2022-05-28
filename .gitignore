@@ -1,2 +1,3 @@
-tmp/
-dataset/original/
+binarySkyWatcher/tmp/
+binarySkyWatcher/dataset/original/**
+binarySkyWatcher/dataset/*.npm
