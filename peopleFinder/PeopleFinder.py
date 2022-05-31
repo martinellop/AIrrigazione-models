@@ -43,7 +43,7 @@ for param in model.parameters():
 
 optimizer = optim.SGD(params_to_update, lr=0.001, momentum=0.9)
 loss_fn = nn.CrossEntropyLoss()
-epoch_num = 200
+epoch_num = 40
 
 # Definisciamo l'accuracy
 def eval_acc(model, data_loader):
@@ -97,4 +97,4 @@ for i in range(epoch_num):
         loss.backward()
         optimizer.step()
 
-
+torch.save(model.state_dict(), "peopleFinder.bin")
