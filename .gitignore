@@ -1,3 +1,4 @@
-binarySkyWatcher/tmp/
-binarySkyWatcher/dataset/original/**
-binarySkyWatcher/dataset/*.npm
+.vscode/
+binarySkyWatcher/tmp/**
+binarySkyWatcher/dataset/**
+binarySkyWatcher/original_pictures/**
