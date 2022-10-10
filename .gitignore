@@ -1,4 +1,5 @@
 .vscode/
 binarySkyWatcher/tmp/**
-binarySkyWatcher/dataset/**.npm
 binarySkyWatcher/original_pictures/**
+**/node_modules/
+**/__pycache__/
