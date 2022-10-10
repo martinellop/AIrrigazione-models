@@ -17,8 +17,8 @@ data_transforms = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
 
-data_dir = "/Users/infopz/Not_iCloud/PeopleDataset/divided2"
-
+data_dir = os.path.join(".","peopleFinder", "dataset")
+print(data_dir)
 # Creazione dei dataset di train & validation
 train_dataset = datasets.ImageFolder(os.path.join(data_dir, "train"), data_transforms)
 test_dataset = datasets.ImageFolder(os.path.join(data_dir, "test"), data_transforms)
